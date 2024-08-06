@@ -141,25 +141,29 @@ function App() {
 
   return (
     <div className="flex justify-center items-center h-screen">
-      <div className="w-full max-w-md mx-auto my-10 shadow-md p-7 rounded-lg object-center text-black bg-slate-300">
-        <h1>Password Generator</h1>
-        <div className="flex w-full mx-2 my-1 overflow-hidden bg-slate-100 rounded-md">
+      <div className=" w-full h-auto max-w-md mx-auto my-12 shadow-md p-7 rounded-lg text-white object-center bg-slate-800">
+        Password Generator
+        <div className="flex w-full mx-1 my-2 overflow-hidden text-black bg-slate-100 rounded-md">
           <input
             type="text"
             value={password}
             className="w-full px-3 py-2 outline-none bg-white rounded-lg"
             placeholder="Password"
             readOnly
-            ref={passwordRef}
+            
           />
           <button
-            className={`outline-none px-3 py-1 shrink-0 ${clicked ? 'bg-green-500' : 'bg-blue-500'}`}
+            className='outline-none bg-blue-500 px-3 py-1 shrink-0'
+            
             onClick={copyToClipboard}
           >
             Copy
           </button>
+
         </div>
-        <div className="fixed flex text-sm gap-x-3">
+
+
+        <div className="fixed flex text-sm gap-x-3 py-1">
           <div className="flex text-sm gap-x-3">
             <input
               type="range"
