@@ -80,8 +80,9 @@
 
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { addTodo } from "../features/todo/todoSlice";
+import { addTodo, toggleCompleted, updateTodo, removeTodo } from "../features/todo/todoSlice";
 
+// AddTodo Component
 const AddTodo = () => {
     const [input, setInput] = useState("");
     const dispatch = useDispatch();
@@ -115,13 +116,15 @@ const AddTodo = () => {
     );
 };
 
-const TodoItem = ({ todo, toggleCompleted, updateTodo, removeTodo }) => {
+// TodoItem Component
+const TodoItem = ({ todo }) => {
     const [todoMsg, setTodoMsg] = useState(todo.text);
     const [isEditable, setIsEditable] = useState(false);
+    const dispatch = useDispatch();
 
     const handleEditTodo = () => {
         if (isEditable) {
-            updateTodo({ id: todo.id, text: todoMsg });
+            dispatch(updateTodo({ id: todo.id, text: todoMsg }));
         }
         setIsEditable(!isEditable);
     };
@@ -136,7 +139,7 @@ const TodoItem = ({ todo, toggleCompleted, updateTodo, removeTodo }) => {
                 type="checkbox"
                 className="cursor-pointer"
                 checked={todo.completed}
-                onChange={() => toggleCompleted(todo.id)}
+                onChange={() => dispatch(toggleCompleted(todo.id))}
             />
             <input
                 type="text"
@@ -156,7 +159,7 @@ const TodoItem = ({ todo, toggleCompleted, updateTodo, removeTodo }) => {
             </button>
             <button
                 className="inline-flex w-8 h-8 rounded-lg text-sm border border-black/10 justify-center items-center bg-gray-50 hover:bg-gray-100 shrink-0"
-                onClick={() => removeTodo(todo.id)}
+                onClick={() => dispatch(removeTodo(todo.id))}
             >
                 ❌
             </button>
@@ -164,6 +167,8 @@ const TodoItem = ({ todo, toggleCompleted, updateTodo, removeTodo }) => {
     );
 };
 
-// Default export AddTodo, and named export TodoItem
-export { TodoItem };
+// For example, default export AddTodo
+export { AddTodo, TodoItem };
 export default AddTodo;
+
+
