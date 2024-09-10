@@ -76,88 +76,94 @@
 // }
 
 // export default TodoItem;
-import React, { useState } from "react";
-import { useDispatch } from 'react-redux';
-import { addTodo, editTodo, deleteTodo } from "../features/todo/todoSlice";
 
-function AddTodo() {
-    const [input, setInput] = useState('');
+
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { addTodo } from "../features/todo/todoSlice";
+
+const AddTodo = () => {
+    const [input, setInput] = useState("");
     const dispatch = useDispatch();
 
-    const addTodoHandler = (e) => {
+    const handleAddTodo = (e) => {
         e.preventDefault();
         if (input.trim()) {
-            dispatch(addTodo(input.trim()));
-            setInput('');
+            dispatch(addTodo(input));
+            setInput("");
         }
-    }
+    };
 
     return (
-        <form onSubmit={addTodoHandler} className="flex gap-2">
-            <input
-                type="text"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                placeholder="Enter a new todo"
-                className="flex-grow px-3 py-2 border rounded"
-            />
-            <button
-                type="submit"
-                className="px-4 py-2 text-white bg-indigo-500 rounded hover:bg-indigo-600 focus:outline-none"
-            >
-                Add Todo
-            </button>
-        </form>
+        <div className="flex items-center justify-center mt-6">
+            <form onSubmit={handleAddTodo} className="flex gap-2">
+                <input
+                    type="text"
+                    className="border rounded-lg px-4 py-2 shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    placeholder="Enter a todo..."
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                />
+                <button
+                    type="submit"
+                    className="text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded-lg shadow-md"
+                >
+                    Add Todo
+                </button>
+            </form>
+        </div>
     );
-}
+};
 
-function TodoItem({ todo }) {
-    const [isTodoEditable, setIsTodoEditable] = useState(false);
+const TodoItem = ({ todo, toggleCompleted, updateTodo, removeTodo }) => {
     const [todoMsg, setTodoMsg] = useState(todo.text);
-    const dispatch = useDispatch();
+    const [isEditable, setIsEditable] = useState(false);
 
-    const updateTodo = () => {
-        if (todoMsg.trim() !== todo.text) {
-            dispatch(editTodo({ id: todo.id, text: todoMsg }));
+    const handleEditTodo = () => {
+        if (isEditable) {
+            updateTodo({ id: todo.id, text: todoMsg });
         }
-        setIsTodoEditable(false);
-    }
-
-    const handleDelete = () => {
-        dispatch(deleteTodo(todo.id));
-    }
+        setIsEditable(!isEditable);
+    };
 
     return (
-        <div className="flex items-center gap-2 p-2 rounded bg-gray-100">
+        <div
+            className={`flex items-center border border-black/10 rounded-lg px-3 py-1.5 gap-x-3 shadow-sm duration-300 text-black ${
+                todo.completed ? "bg-[#c6e9a7]" : "bg-[#ccbed7]"
+            }`}
+        >
+            <input
+                type="checkbox"
+                className="cursor-pointer"
+                checked={todo.completed}
+                onChange={() => toggleCompleted(todo.id)}
+            />
             <input
                 type="text"
+                className={`border outline-none w-full bg-transparent rounded-lg ${
+                    isEditable ? "border-black/10 px-2" : "border-transparent"
+                } ${todo.completed ? "line-through" : ""}`}
                 value={todoMsg}
                 onChange={(e) => setTodoMsg(e.target.value)}
-                readOnly={!isTodoEditable}
-                className={`flex-grow p-1 rounded ${
-                    isTodoEditable ? "border" : "border-none bg-transparent"
-                }`}
+                readOnly={!isEditable}
             />
             <button
-                onClick={() => {
-                    if (isTodoEditable) {
-                        updateTodo();
-                    } else {
-                        setIsTodoEditable(true);
-                    }
-                }}
-                className="p-1 rounded hover:bg-gray-200"
+                className="inline-flex w-8 h-8 rounded-lg text-sm border border-black/10 justify-center items-center bg-gray-50 hover:bg-gray-100 shrink-0"
+                onClick={handleEditTodo}
+                disabled={todo.completed}
             >
-                {isTodoEditable ? "💾" : "✏️"}
+                {isEditable ? "📁" : "✏️"}
             </button>
             <button
-                onClick={handleDelete}
-                className="p-1 rounded hover:bg-gray-200"
+                className="inline-flex w-8 h-8 rounded-lg text-sm border border-black/10 justify-center items-center bg-gray-50 hover:bg-gray-100 shrink-0"
+                onClick={() => removeTodo(todo.id)}
             >
-                🗑️
+                ❌
             </button>
         </div>
     );
-}
+};
 
-export default { AddTodo, TodoItem };
+// Default export AddTodo, and named export TodoItem
+export { TodoItem };
+export default AddTodo;
