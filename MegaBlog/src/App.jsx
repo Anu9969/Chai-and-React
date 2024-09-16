@@ -1,16 +1,45 @@
+import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import './App.css';
+import authService from './appwrite/auth';
+import { login, logout } from './store/authSlice'; // Import login and logout actions
+import { Header, Footer } from './components';
 
-import './App.css'
+import { Outlet } from 'react-router-dom'; // Import Outlet component
 
 function App() {
-  // console.log(process.env.REACT_APP__APPWRITE_URL); //har ek library ya framework ke liye alag tarika hota h to acces env 
-  //env file bsek baar load hoti hai
-  console.log(import.meta.env.VITE_APPWRITE_URL);
-  return (
-    <>
-      <h1>MegaBlog</h1>
+  const [loading, setLoading] = useState(true);
+  const dispatch = useDispatch();
 
-    </>
-  )
+  useEffect(() => {
+    authService
+      .getUser()
+      .then((userData) => {
+        if (userData) {
+          dispatch(login({ userData }));
+        } else {
+          dispatch(logout());
+        }
+      })
+      .finally(() => setLoading(false));
+  }, []); 
+
+  return !loading ? (
+    
+      <div
+       className='min-h-screen flex flex-wrap content-between bg-gray-400'>Content goes here 
+      <div className='w-full block'> 
+        <Header/>
+        <main>
+          <Outlet/>
+        </main>
+        <Footer/>
+        </div>
+        </div>
+  ) : (
+    <div>Loading...</div> // Optional loading state
+  );
 }
 
-export default App
+export default App;
+

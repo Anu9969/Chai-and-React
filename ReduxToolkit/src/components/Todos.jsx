@@ -67,7 +67,7 @@ const Todos = () => {
 
     return (
         <div className="w-full max-w-lg mt-6">
-            <h2 className="flex flex-col items-center justify-center text-2xl font-semibold text-gray-700 mb-4">Todos</h2>
+            <h2 className="flex flex-col items-center justify-center text-2xl font-semibold text-white mb-4">Todos</h2>
             <ul className="space-y-2">
                 {todos.map((todo) => (
                     <li key={todo.id}>
