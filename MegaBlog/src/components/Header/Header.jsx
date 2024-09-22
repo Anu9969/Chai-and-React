@@ -41,7 +41,33 @@ function Header() {
   ]
   
   return (
-    <div>Header</div>
+   <header className="py-3 shadow bg-gray-500">
+    <Container>
+      <nav className='flex'>
+        <div className='mr-4'>
+          <Link width='70px'> //ye for the logo
+          </Link>
+        </div>
+        <ul className='flex ml-auto'>
+          {navItems.map((item)=>
+          item.active ? (
+            <li key={item.name}>
+              <button
+              onClick={()=> navigate(item.slug)}
+              className='inline-block px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600'
+              >{item.name}</button>
+            </li>
+          ): null)}
+          //niche authstatus jb true hoga tbhi uske aage ka code run hoga && wala
+          {authStatus && (
+            <li>
+              <LogoutBtn /> //authenticated h tbhi logout btn dikhega
+            </li>
+          )}
+        </ul>
+      </nav>
+    </Container>
+   </header>
   )
 }
 
